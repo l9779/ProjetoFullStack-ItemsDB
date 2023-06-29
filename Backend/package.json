@@ -1,0 +1,42 @@
+{
+  "name": "mult-db-heroes-api",
+  "version": "1.0.0",
+  "description": "sudo docker run \\  --name postgres \\  -e POSTGRES_USER=lucas \\  -e POSTGRES_PASSWORD=essaeasenha \\  -e POSTGRES_DB=heroes \\  -p 5432:5432 \\  -d \\  postgres",
+  "main": "index.js",
+  "scripts": {
+    "test:postgres": "mocha src/test/postgres.test.js",
+    "test:mongodb": "mocha src/test/mongodb.test.js",
+    "test:api": "mocha src/test/apiHeroes.test.js",
+    "test:auth": "mocha src/test/auth.test.js",
+    "test:password": "mocha src/test/passwordHelper.test.js",
+    "test:all": "nyc --reporter=html mocha --exit src/test/*.test.js",
+    "start": "nodemon src/api.js",
+    "env:prod": "cross-env NODE_ENV=prod",
+    "env:dev": "cross-env NODE_ENV=dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@hapi/hapi": "^21.3.2",
+    "@hapi/inert": "^7.1.0",
+    "@hapi/vision": "^7.0.2",
+    "bcrypt": "^5.1.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.2.0",
+    "hapi-auth-jwt2": "^10.4.0",
+    "hapi-swagger": "^16.0.1",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.2.4",
+    "nodemon": "^2.0.22",
+    "pg": "^8.11.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.32.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0"
+  }
+}
