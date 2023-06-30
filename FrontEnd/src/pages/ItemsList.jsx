@@ -10,6 +10,7 @@ import {
   DeleteModal,
   AddModal,
   DeleteAllModal,
+  LoginNotifyModal,
 } from './../components/Modals';
 import {
   EditIcon,
@@ -22,11 +23,19 @@ import {
   openEditModal,
   openAddModal,
   openDeleteAllModal,
+  openLoginInNotifyModal,
 } from './../../reducers/modalSlice';
 
 const ItemsListPage = () => {
-  const { isDeleteOpen, isEditOpen, isAddOpen, isDeleteAllOpen, item } =
-    useSelector((store) => store.modal);
+  const {
+    isDeleteOpen,
+    isEditOpen,
+    isAddOpen,
+    isDeleteAllOpen,
+    isLoginInNotifyOpen,
+    item,
+  } = useSelector((store) => store.modal);
+  const { isLoggedIn } = useSelector((store) => store.user);
   const { itemsList, isLoading } = useSelector((store) => store.db);
 
   const [searchFilter, setSearchFilter] = useState('');
@@ -64,13 +73,19 @@ const ItemsListPage = () => {
               <div className='item-actions'>
                 <button
                   className='edit-btn'
-                  onClick={() => dispatch(openEditModal(listItem))}
+                  onClick={() => {
+                    if (isLoggedIn) dispatch(openEditModal(listItem));
+                    else dispatch(openLoginInNotifyModal());
+                  }}
                 >
                   <EditIcon />
                 </button>
                 <button
                   className='del-btn'
-                  onClick={() => dispatch(openDeleteModal(listItem))}
+                  onClick={() => {
+                    if (isLoggedIn) dispatch(openDeleteModal(listItem));
+                    else dispatch(openLoginInNotifyModal());
+                  }}
                 >
                   <DeleteItemIcon />
                 </button>
@@ -87,12 +102,21 @@ const ItemsListPage = () => {
       <div className='title-section'>
         <h1>Lista de itens</h1>
 
-        <button className='add-btn' onClick={() => dispatch(openAddModal())}>
+        <button
+          className='add-btn'
+          onClick={() => {
+            if (isLoggedIn) dispatch(openAddModal());
+            else dispatch(openLoginInNotifyModal());
+          }}
+        >
           <AddIcon />
         </button>
         <button
           className='del-btn'
-          onClick={() => dispatch(openDeleteAllModal())}
+          onClick={() => {
+            if (isLoggedIn) dispatch(openDeleteAllModal());
+            else dispatch(openLoginInNotifyModal());
+          }}
         >
           <DeleteAllIcon />
         </button>
@@ -109,6 +133,7 @@ const ItemsListPage = () => {
         {isEditOpen && <EditModal item={item} />}
         {isAddOpen && <AddModal />}
         {isDeleteAllOpen && <DeleteAllModal />}
+        {isLoginInNotifyOpen && <LoginNotifyModal />}
 
         {isLoading ? <Loading /> : <RenderItems />}
       </section>

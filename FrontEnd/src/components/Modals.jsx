@@ -9,6 +9,7 @@ import {
   closeEditModal,
   closeDeleteModal,
   closeDeleteAllModal,
+  closeLoginInNotifyModal,
 } from './../../reducers/modalSlice';
 import {
   createItemList,
@@ -215,6 +216,20 @@ export const AddModal = () => {
   );
 };
 
+export const LoginNotifyModal = () => {
+  const dispatch = useDispatch();
+
+  return (
+    <ModalComp>
+      <div className='modal'>
+        <h2>Log in first</h2>
+        <h3>to make changes on the list</h3>
+        <Button onClick={() => dispatch(closeLoginInNotifyModal())}>ok</Button>
+      </div>
+    </ModalComp>
+  );
+};
+
 const ModalComp = styled.aside`
   position: absolute;
   left: 50%;
@@ -235,6 +250,12 @@ const ModalComp = styled.aside`
 
   .modal h2 {
     text-decoration: underline;
+  }
+
+  .modal h3 {
+    color: ${colors.grey};
+    font-size: 1.5rem;
+    margin: 20px 0;
   }
 
   .modal p {

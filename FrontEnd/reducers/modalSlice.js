@@ -6,6 +6,7 @@ const initialState = {
   isEditOpen: false,
   isAddOpen: false,
   isDeleteAllOpen: false,
+  isLoginInNotifyOpen: false,
   item: {},
 };
 
@@ -18,6 +19,7 @@ const modalSlice = createSlice({
 
       state.item = action.payload;
       state.isDeleteOpen = true;
+      state.isAnyOpen = true;
     },
     closeDeleteModal: (state) => {
       state.item = {};
@@ -29,6 +31,7 @@ const modalSlice = createSlice({
 
       state.item = action.payload;
       state.isEditOpen = true;
+      state.isAnyOpen = true;
     },
     closeEditModal: (state) => {
       state.item = {};
@@ -39,6 +42,7 @@ const modalSlice = createSlice({
       if (state.isAnyOpen) return;
 
       state.isAddOpen = true;
+      state.isAnyOpen = true;
     },
     closeAddModal: (state) => {
       state.isAddOpen = false;
@@ -48,9 +52,18 @@ const modalSlice = createSlice({
       if (state.isAnyOpen) return;
 
       state.isDeleteAllOpen = true;
+      state.isAnyOpen = true;
     },
     closeDeleteAllModal: (state) => {
       state.isDeleteAllOpen = false;
+      state.isAnyOpen = false;
+    },
+    openLoginInNotifyModal: (state) => {
+      state.isLoginInNotifyOpen = true;
+      state.isAnyOpen = true;
+    },
+    closeLoginInNotifyModal: (state) => {
+      state.isLoginInNotifyOpen = false;
       state.isAnyOpen = false;
     },
   },
@@ -65,5 +78,7 @@ export const {
   closeAddModal,
   openDeleteAllModal,
   closeDeleteAllModal,
+  openLoginInNotifyModal,
+  closeLoginInNotifyModal,
 } = modalSlice.actions;
 export default modalSlice.reducer;

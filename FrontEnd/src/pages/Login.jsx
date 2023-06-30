@@ -27,13 +27,17 @@ const LoginPage = () => {
 
     localStorage.setItem('user', JSON.stringify(user));
 
-    dispatch(logIn());
+    dispatch(logIn(user));
   }
 
   return (
     <Login>
       <h1>Entre na sua conta</h1>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form
+        onSubmit={(e) => {
+          handleSubmit(e);
+        }}
+      >
         <label htmlFor='username'>Username:</label>
         <input type='text' name='username' id='username' />
         <label htmlFor='password'>Password:</label>
