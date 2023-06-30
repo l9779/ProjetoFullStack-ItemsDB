@@ -21,6 +21,10 @@ class ICrud {
     throw new NotImplementedException();
   }
 
+  deleteAll() {
+    throw new NotImplementedException();
+  }
+
   isConnected() {
     throw new NotImplementedException();
   }

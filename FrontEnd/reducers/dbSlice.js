@@ -75,6 +75,21 @@ export const deleteItemList = createAsyncThunk(
   }
 );
 
+export const clearItemList = createAsyncThunk(
+  'list/clearItemList',
+  async () => {
+    try {
+      const resp = await axios.delete(`${BaseUrl}/deleteAll`);
+      console.log(resp.status, resp.statusText, resp.data);
+
+      const list = await axios.get(`${BaseUrl}/list`);
+      return list.data;
+    } catch (error) {
+      console.error('clearItemList error: ', error);
+    }
+  }
+);
+
 const initialState = {
   itemsList: [],
   isLoading: false,
@@ -83,30 +98,7 @@ const initialState = {
 const dbSlice = createSlice({
   name: 'db',
   initialState,
-  reducers: {
-    editItem: (state, action) => {
-      const item = action.payload;
-      const id = item._id;
-
-      try {
-        console.log('edit ', id);
-      } catch (error) {
-        console.error('Update error: ', error);
-      }
-
-      const updatedName = item.nome;
-      const updatedDescription = item.poder;
-
-      state.itemsList = state.itemsList.map((listItem) => {
-        if (listItem._id === id) {
-          listItem.nome = updatedName;
-          listItem.poder = updatedDescription;
-        }
-
-        return listItem;
-      });
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getItemList.pending, (state) => {
@@ -152,9 +144,20 @@ const dbSlice = createSlice({
       .addCase(deleteItemList.rejected, (state, action) => {
         console.error('editItemList rejected! - ', action);
         state.isLoading = false;
+      })
+      .addCase(clearItemList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(clearItemList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.itemsList = action.payload;
+      })
+      .addCase(clearItemList.rejected, (state, action) => {
+        console.error('clearItemList rejected! - ', action);
+        state.isLoading = false;
       });
   },
 });
 
-export const { removeItem, editItem, addItem } = dbSlice.actions;
+// export const {  } = dbSlice.actions;
 export default dbSlice.reducer;

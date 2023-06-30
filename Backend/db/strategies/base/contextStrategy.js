@@ -22,6 +22,10 @@ class ContextStrategy extends ICrud {
     return this._database.delete(id);
   }
 
+  deleteAll() {
+    return this._database.deleteAll();
+  }
+
   isConnected() {
     return this._database.isConnected();
   }

@@ -4,8 +4,13 @@ import { useEffect, useState } from 'react';
 
 import Loading from './../components/Loading';
 import { colors } from './../../config/cssValues';
-import { EditModal, DeleteModal, AddModal } from './../components/Modals';
 import { getItemList } from './../../reducers/dbSlice';
+import {
+  EditModal,
+  DeleteModal,
+  AddModal,
+  DeleteAllModal,
+} from './../components/Modals';
 import {
   EditIcon,
   DeleteAllIcon,
@@ -16,13 +21,13 @@ import {
   openDeleteModal,
   openEditModal,
   openAddModal,
+  openDeleteAllModal,
 } from './../../reducers/modalSlice';
 
 const ItemsListPage = () => {
+  const { isDeleteOpen, isEditOpen, isAddOpen, isDeleteAllOpen, item } =
+    useSelector((store) => store.modal);
   const { itemsList, isLoading } = useSelector((store) => store.db);
-  const { isDeleteOpen, isEditOpen, isAddOpen, item } = useSelector(
-    (store) => store.modal
-  );
 
   const [searchFilter, setSearchFilter] = useState('');
 
@@ -87,7 +92,7 @@ const ItemsListPage = () => {
         </button>
         <button
           className='del-btn'
-          onClick={() => console.log('delete all click')}
+          onClick={() => dispatch(openDeleteAllModal())}
         >
           <DeleteAllIcon />
         </button>
@@ -103,6 +108,7 @@ const ItemsListPage = () => {
         {isDeleteOpen && <DeleteModal item={item} />}
         {isEditOpen && <EditModal item={item} />}
         {isAddOpen && <AddModal />}
+        {isDeleteAllOpen && <DeleteAllModal />}
 
         {isLoading ? <Loading /> : <RenderItems />}
       </section>

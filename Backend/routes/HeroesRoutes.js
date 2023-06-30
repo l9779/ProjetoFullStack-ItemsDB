@@ -164,6 +164,36 @@ class HeroesRoutes extends BaseRoute {
       },
     };
   }
+
+  deleteAll() {
+    return {
+      path: '/herois/deleteAll',
+      method: 'DELETE',
+      options: {
+        auth: false,
+        tags: ['api'],
+        description: 'Deve deletar todos os items',
+        notes: 'Pode deletar todos os itens.',
+        validate: {
+          failAction,
+          // headers,
+        },
+      },
+      handler: async (request) => {
+        try {
+          const result = await this.db.deleteAll();
+          console.log(result);
+
+          return result.acknowledged
+            ? { message: `${result.deletedCount} items deletados.` }
+            : Boom.preconditionFailed('Algo de errado não está certo.');
+        } catch (error) {
+          console.error('DELETE ALL Error', error);
+          return Boom.internal();
+        }
+      },
+    };
+  }
 }
 
 module.exports = HeroesRoutes;

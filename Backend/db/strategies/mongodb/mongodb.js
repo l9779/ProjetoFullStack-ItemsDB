@@ -56,7 +56,11 @@ class MongoDB extends ICrud {
   }
 
   delete(id) {
-    return id ? this._schema.deleteOne({ _id: id }) : this._schema.deleteAll();
+    return this._schema.deleteOne({ _id: id });
+  }
+
+  deleteAll() {
+    return this._schema.deleteMany({});
   }
 }
 

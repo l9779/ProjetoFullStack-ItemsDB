@@ -6,13 +6,15 @@ import Button from './Button';
 import { colors, measures } from './../../config/cssValues';
 import {
   closeAddModal,
-  closeDeleteModal,
   closeEditModal,
+  closeDeleteModal,
+  closeDeleteAllModal,
 } from './../../reducers/modalSlice';
 import {
   createItemList,
   editItemList,
   deleteItemList,
+  clearItemList,
 } from './../../reducers/dbSlice';
 
 export const DeleteModal = ({ item }) => {
@@ -48,6 +50,39 @@ export const DeleteModal = ({ item }) => {
   );
 };
 
+export const DeleteAllModal = () => {
+  const dispatch = useDispatch();
+
+  return (
+    <ModalComp>
+      <div className='modal'>
+        <h2>Remove All Items?</h2>
+      </div>
+
+      <div className='btn-container'>
+        <Button
+          className='btn-confirm'
+          onClick={() => {
+            dispatch(clearItemList());
+            dispatch(closeDeleteAllModal());
+          }}
+        >
+          Confirm
+        </Button>
+
+        <Button
+          className='btn-cancel'
+          onClick={() => {
+            dispatch(closeDeleteAllModal());
+          }}
+        >
+          Cancel
+        </Button>
+      </div>
+    </ModalComp>
+  );
+};
+
 export const EditModal = ({ item }) => {
   const { _id, nome, poder } = item;
   const dispatch = useDispatch();
@@ -64,6 +99,10 @@ export const EditModal = ({ item }) => {
     }
     if (!updatedDescription || updatedDescription.length <= 2) {
       console.error('descrição inválida!');
+      return;
+    }
+    if (updatedName === nome && updatedDescription === poder) {
+      dispatch(closeEditModal());
       return;
     }
 
@@ -172,14 +211,6 @@ export const AddModal = () => {
           </div>
         </form>
       </div>
-    </ModalComp>
-  );
-};
-
-export const DeleteAllModal = () => {
-  return (
-    <ModalComp>
-      <h1>teste</h1>
     </ModalComp>
   );
 };
