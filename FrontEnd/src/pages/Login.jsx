@@ -1,14 +1,14 @@
 import { styled } from 'styled-components';
 import { useDispatch } from 'react-redux';
 
-import { colors, gradients, measures } from './../../config/cssValues';
-import { logIn } from './../../reducers/userSlice';
-import Button from './../components/Button';
+import { colors, gradients, measures } from '../../config/cssValues';
+import { loginUser } from '../../reducers/userSlice';
+import Button from '../components/Button';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
 
-  function handleSubmit(e) {
+  async function handleLogin(e) {
     e.preventDefault();
 
     const username = e.target['username'].value;
@@ -23,11 +23,10 @@ const LoginPage = () => {
       return;
     }
 
-    const user = { username, password, token: '1234' };
+    const LogInUser = { username, password };
+    const user = await dispatch(loginUser(LogInUser));
 
     localStorage.setItem('user', JSON.stringify(user));
-
-    dispatch(logIn(user));
   }
 
   return (
@@ -35,7 +34,7 @@ const LoginPage = () => {
       <h1>Entre na sua conta</h1>
       <form
         onSubmit={(e) => {
-          handleSubmit(e);
+          handleLogin(e);
         }}
       >
         <label htmlFor='username'>Username:</label>

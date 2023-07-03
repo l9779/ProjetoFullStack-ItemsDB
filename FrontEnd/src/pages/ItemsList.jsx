@@ -35,7 +35,7 @@ const ItemsListPage = () => {
     isLoginInNotifyOpen,
     item,
   } = useSelector((store) => store.modal);
-  const { isLoggedIn } = useSelector((store) => store.user);
+  const { isLoggedin } = useSelector((store) => store.user);
   const { itemsList, isLoading } = useSelector((store) => store.db);
 
   const [searchFilter, setSearchFilter] = useState('');
@@ -74,7 +74,7 @@ const ItemsListPage = () => {
                 <button
                   className='edit-btn'
                   onClick={() => {
-                    if (isLoggedIn) dispatch(openEditModal(listItem));
+                    if (isLoggedin) dispatch(openEditModal(listItem));
                     else dispatch(openLoginInNotifyModal());
                   }}
                 >
@@ -83,7 +83,7 @@ const ItemsListPage = () => {
                 <button
                   className='del-btn'
                   onClick={() => {
-                    if (isLoggedIn) dispatch(openDeleteModal(listItem));
+                    if (isLoggedin) dispatch(openDeleteModal(listItem));
                     else dispatch(openLoginInNotifyModal());
                   }}
                 >
@@ -105,7 +105,7 @@ const ItemsListPage = () => {
         <button
           className='add-btn'
           onClick={() => {
-            if (isLoggedIn) dispatch(openAddModal());
+            if (isLoggedin) dispatch(openAddModal());
             else dispatch(openLoginInNotifyModal());
           }}
         >
@@ -114,7 +114,7 @@ const ItemsListPage = () => {
         <button
           className='del-btn'
           onClick={() => {
-            if (isLoggedIn) dispatch(openDeleteAllModal());
+            if (isLoggedin) dispatch(openDeleteAllModal());
             else dispatch(openLoginInNotifyModal());
           }}
         >

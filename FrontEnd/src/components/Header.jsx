@@ -1,16 +1,22 @@
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
-import { colors, gradients } from './../../config/cssValues';
-import { LogoutIcon, UserIcon } from './../../assets/icons';
-import { logOut } from './../../reducers/userSlice';
+import { colors, gradients } from '../../config/cssValues';
+import { LogoutIcon, UserIcon } from '../../assets/icons';
+import { logOut } from '../../reducers/userSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const loggedUser = JSON.parse(localStorage.getItem('user'));
 
-  const { isLoggedIn } = useSelector((store) => store.user);
+  const { isLoggedIn, user } = useSelector((store) => store.user);
+
+  useEffect(() => {
+    if (localStorage.getItem('user')) {
+      const loggedUser = localStorage.getItem('user');
+    }
+  }, []);
 
   function handleLogout() {
     localStorage.clear();
@@ -31,7 +37,7 @@ const Header = () => {
         {isLoggedIn ? (
           <div className='user'>
             <UserIcon />
-            <h2>{loggedUser.username}</h2>
+            <h2>{user.username}</h2>
             <button
               onClick={() => {
                 handleLogout();
