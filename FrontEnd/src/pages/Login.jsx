@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 
 import { colors, gradients, measures } from '../../config/cssValues';
 import { loginUser } from '../../reducers/userSlice';
@@ -7,6 +8,8 @@ import Button from '../components/Button';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -24,9 +27,15 @@ const LoginPage = () => {
     }
 
     const LogInUser = { username, password };
-    const user = await dispatch(loginUser(LogInUser));
+    const loginStatus = await dispatch(loginUser(LogInUser));
 
-    localStorage.setItem('user', JSON.stringify(user));
+    if (loginStatus.meta.requestStatus === 'fulfilled') {
+      localStorage.setItem('user', JSON.stringify(loginStatus.payload));
+    }
+
+    if (loginStatus.meta.requestStatus === 'rejected') {
+      setErrorMessage(loginStatus.error.message);
+    }
   }
 
   return (
@@ -41,6 +50,7 @@ const LoginPage = () => {
         <input type='text' name='username' id='username' />
         <label htmlFor='password'>Password:</label>
         <input type='password' name='password' id='password' />
+        {errorMessage && <h2>{errorMessage}</h2>}
         <Button type='submit'>Login</Button>
       </form>
     </Login>
@@ -84,6 +94,12 @@ const Login = styled.main`
     background-color: ${colors['content-bg-color']};
     border: none;
     color: white;
+  }
+
+  form h2 {
+    color: ${colors.red};
+    text-align: center;
+    padding-top: 10px;
   }
 
   form button {

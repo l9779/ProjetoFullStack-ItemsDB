@@ -2,29 +2,29 @@ import { styled } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
-import Loading from './../components/Loading';
-import { colors } from './../../config/cssValues';
-import { getItemList } from './../../reducers/dbSlice';
+import Loading from '../components/Loading';
+import { colors } from '../../config/cssValues';
+import { getItemList } from '../../reducers/dbSlice';
 import {
   EditModal,
   DeleteModal,
   AddModal,
   DeleteAllModal,
   LoginNotifyModal,
-} from './../components/Modals';
+} from '../components/Modals';
 import {
   EditIcon,
   DeleteAllIcon,
   DeleteItemIcon,
   AddIcon,
-} from './../../assets/icons';
+} from '../../assets/icons';
 import {
   openDeleteModal,
   openEditModal,
   openAddModal,
   openDeleteAllModal,
   openLoginInNotifyModal,
-} from './../../reducers/modalSlice';
+} from '../../reducers/modalSlice';
 
 const ItemsListPage = () => {
   const {
@@ -35,7 +35,7 @@ const ItemsListPage = () => {
     isLoginInNotifyOpen,
     item,
   } = useSelector((store) => store.modal);
-  const { isLoggedin } = useSelector((store) => store.user);
+  const { isLoggedIn } = useSelector((store) => store.user);
   const { itemsList, isLoading } = useSelector((store) => store.db);
 
   const [searchFilter, setSearchFilter] = useState('');
@@ -74,7 +74,7 @@ const ItemsListPage = () => {
                 <button
                   className='edit-btn'
                   onClick={() => {
-                    if (isLoggedin) dispatch(openEditModal(listItem));
+                    if (isLoggedIn) dispatch(openEditModal(listItem));
                     else dispatch(openLoginInNotifyModal());
                   }}
                 >
@@ -83,7 +83,7 @@ const ItemsListPage = () => {
                 <button
                   className='del-btn'
                   onClick={() => {
-                    if (isLoggedin) dispatch(openDeleteModal(listItem));
+                    if (isLoggedIn) dispatch(openDeleteModal(listItem));
                     else dispatch(openLoginInNotifyModal());
                   }}
                 >
@@ -105,7 +105,7 @@ const ItemsListPage = () => {
         <button
           className='add-btn'
           onClick={() => {
-            if (isLoggedin) dispatch(openAddModal());
+            if (isLoggedIn) dispatch(openAddModal());
             else dispatch(openLoginInNotifyModal());
           }}
         >
@@ -114,7 +114,7 @@ const ItemsListPage = () => {
         <button
           className='del-btn'
           onClick={() => {
-            if (isLoggedin) dispatch(openDeleteAllModal());
+            if (isLoggedIn) dispatch(openDeleteAllModal());
             else dispatch(openLoginInNotifyModal());
           }}
         >

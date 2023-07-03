@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import { colors, gradients } from '../../config/cssValues';
 import { LogoutIcon, UserIcon } from '../../assets/icons';
-import { logOut } from '../../reducers/userSlice';
+import { logIn, logOut } from '../../reducers/userSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,8 @@ const Header = () => {
 
   useEffect(() => {
     if (localStorage.getItem('user')) {
-      const loggedUser = localStorage.getItem('user');
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      dispatch(logIn(storedUser));
     }
   }, []);
 
