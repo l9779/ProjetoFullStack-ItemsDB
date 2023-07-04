@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 import Loading from '../components/Loading';
-import { colors } from '../../config/cssValues';
+import { colors, measures } from '../../config/cssValues';
 import { getItemList } from '../../reducers/dbSlice';
 import {
   EditModal,
@@ -36,7 +36,9 @@ const ItemsListPage = () => {
     item,
   } = useSelector((store) => store.modal);
   const { isLoggedIn } = useSelector((store) => store.user);
-  const { itemsList, isLoading } = useSelector((store) => store.db);
+  const { itemsList, isLoading, errorMessage } = useSelector(
+    (store) => store.db
+  );
 
   const [searchFilter, setSearchFilter] = useState('');
 
@@ -64,7 +66,7 @@ const ItemsListPage = () => {
           const { nome, poder, _id } = listItem;
 
           return (
-            <div className='item' key={_id}>
+            <ItemDiv key={_id}>
               <div className='item-attributes'>
                 <h2>{nome}</h2>
                 <h3>{poder}</h3>
@@ -90,15 +92,26 @@ const ItemsListPage = () => {
                   <DeleteItemIcon />
                 </button>
               </div>
-            </div>
+            </ItemDiv>
           );
         })}
       </>
     );
   };
 
+  const ErrorMessage = () => {
+    return (
+      <ErrorSection>
+        {/* <pre>401</pre>
+        <span>&nbsp;-&nbsp;</span> */}
+        <h2>{errorMessage}</h2>
+      </ErrorSection>
+    );
+  };
+
   return (
     <ItemList>
+      {errorMessage && <ErrorMessage />}
       <div className='title-section'>
         <h1>Lista de itens</h1>
 
@@ -141,6 +154,41 @@ const ItemsListPage = () => {
   );
 };
 
+const ErrorSection = styled.section`
+  background-color: ${colors['error-bg']};
+  border: 1px solid ${colors.red};
+  color: ${colors['error-text']};
+  border-radius: ${measures['br-1']};
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 15px 0;
+  margin: 0 5px 10px 5px;
+
+  pre,
+  h2 {
+    font-size: 1.6rem;
+  }
+`;
+
+const ItemDiv = styled.div`
+  background-color: ${colors['content-bg-color']};
+  border-radius: 1.2rem;
+  padding: 1rem 2rem;
+  border: 1px solid ${colors.white};
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .item-actions {
+    display: flex;
+    gap: 1rem;
+  }
+`;
+
 const ItemList = styled.main`
   max-width: 80rem;
   margin: 0 auto;
@@ -173,26 +221,6 @@ const ItemList = styled.main`
     overflow-y: scroll;
     min-height: 7rem;
     max-height: 70vh;
-  }
-
-  .item {
-    background-color: ${colors['content-bg-color']};
-    border-radius: 1.2rem;
-    padding: 1rem 2rem;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &:hover {
-      color: ${colors.yellow};
-      text-decoration: underline;
-    }
-  }
-
-  .item-actions {
-    display: flex;
-    gap: 1rem;
   }
 
   .add-btn,

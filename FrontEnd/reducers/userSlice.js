@@ -18,7 +18,8 @@ export const loginUser = createAsyncThunk('login/loginUser', async (user) => {
     return loggedUser;
   } catch (err) {
     const { statusCode, message } = err.response.data;
-    throw { message, statusCode }; // isso precisa ficar aqui para evitar crash
+    console.error(statusCode, message);
+    throw { message: `${statusCode} - ${message}` };
   }
 });
 
@@ -49,7 +50,7 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isLoggedIn = false;
-        console.log('loginUser rejected! - ', action);
+        console.error('loginUser rejected! - ', action.error.message);
       });
   },
 });

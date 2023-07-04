@@ -21,13 +21,12 @@ class HeroesRoutes extends BaseRoute {
       path: `/herois/list`,
       method: 'GET',
       options: {
-        auth: false,
+        auth: false, // por padrão a app requer auth, nessa rota eu tenho que especificar que não precisa.
         tags: ['api'],
         description: 'Deve listar items',
         notes: 'pode paginar resultados e filtrar por nome',
         validate: {
           failAction,
-          // headers,
           query: Joi.object({
             skip: Joi.number().integer().default(0),
             limit: Joi.number().integer().default(1000),
@@ -61,13 +60,12 @@ class HeroesRoutes extends BaseRoute {
       path: '/herois/post',
       method: 'POST',
       options: {
-        auth: false,
         tags: ['api'],
         description: 'Deve registrar items',
         notes: 'Deve registrar item com nome e poder',
         validate: {
           failAction,
-          // headers,
+          headers,
           payload: Joi.object({
             nome: Joi.string().required().min(3).max(100),
             poder: Joi.string().required().min(2).max(60),
@@ -95,13 +93,12 @@ class HeroesRoutes extends BaseRoute {
       path: '/herois/update/{id}',
       method: 'PATCH',
       options: {
-        auth: false,
         tags: ['api'],
         description: 'Deve atualizar items',
         notes: 'Pode atualizar items por nome e poder',
         validate: {
           failAction,
-          // headers,
+          headers,
           params: Joi.object({
             id: Joi.string().required(),
           }),
@@ -136,13 +133,12 @@ class HeroesRoutes extends BaseRoute {
       path: '/herois/delete/{id?}',
       method: 'DELETE',
       options: {
-        auth: false,
         tags: ['api'],
         description: 'Deve deletar items',
         notes: 'Pode deletar itens por id',
         validate: {
           failAction,
-          // headers,
+          headers,
           params: Joi.object({
             id: Joi.string(),
           }),
@@ -170,13 +166,12 @@ class HeroesRoutes extends BaseRoute {
       path: '/herois/deleteAll',
       method: 'DELETE',
       options: {
-        auth: false,
         tags: ['api'],
         description: 'Deve deletar todos os items',
         notes: 'Pode deletar todos os itens.',
         validate: {
           failAction,
-          // headers,
+          headers,
         },
       },
       handler: async (request) => {

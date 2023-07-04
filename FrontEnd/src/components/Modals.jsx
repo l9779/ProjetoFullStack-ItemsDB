@@ -3,20 +3,20 @@ import { useDispatch } from 'react-redux';
 import { styled } from 'styled-components';
 
 import Button from './Button';
-import { colors, measures } from './../../config/cssValues';
+import { colors, measures } from '../../config/cssValues';
 import {
   closeAddModal,
   closeEditModal,
   closeDeleteModal,
   closeDeleteAllModal,
   closeLoginInNotifyModal,
-} from './../../reducers/modalSlice';
+} from '../../reducers/modalSlice';
 import {
   createItemList,
   editItemList,
   deleteItemList,
   clearItemList,
-} from './../../reducers/dbSlice';
+} from '../../reducers/dbSlice';
 
 export const DeleteModal = ({ item }) => {
   const dispatch = useDispatch();
@@ -222,8 +222,8 @@ export const LoginNotifyModal = () => {
   return (
     <ModalComp>
       <div className='modal'>
-        <h2>Log in first</h2>
-        <h3>to make changes on the list</h3>
+        <h2>Not logged in</h2>
+        <h3>You must be logged in to make changes on the list</h3>
         <Button onClick={() => dispatch(closeLoginInNotifyModal())}>ok</Button>
       </div>
     </ModalComp>

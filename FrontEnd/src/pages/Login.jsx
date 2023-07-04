@@ -1,6 +1,7 @@
 import { styled } from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { colors, gradients, measures } from '../../config/cssValues';
 import { loginUser } from '../../reducers/userSlice';
@@ -8,6 +9,7 @@ import Button from '../components/Button';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -27,14 +29,14 @@ const LoginPage = () => {
     }
 
     const LogInUser = { username, password };
-    const loginStatus = await dispatch(loginUser(LogInUser));
+    const loginResponse = await dispatch(loginUser(LogInUser));
+    const requestStatus = loginResponse.meta.requestStatus;
 
-    if (loginStatus.meta.requestStatus === 'fulfilled') {
-      localStorage.setItem('user', JSON.stringify(loginStatus.payload));
-    }
-
-    if (loginStatus.meta.requestStatus === 'rejected') {
-      setErrorMessage(loginStatus.error.message);
+    if (requestStatus === 'fulfilled') {
+      localStorage.setItem('user', JSON.stringify(loginResponse.payload));
+      navigate('/list');
+    } else {
+      setErrorMessage(loginResponse.error.message);
     }
   }
 
