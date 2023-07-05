@@ -3,45 +3,33 @@ import axios from 'axios';
 
 const BaseUrl = 'http://localhost:5000/herois';
 
-function getToken() {
-  if (localStorage.getItem('user')) {
-    const storedData = JSON.parse(localStorage.getItem('user'));
-    return storedData.token;
-  }
-
-  return null;
-}
-
-const myAxios = axios.create({
-  baseURL: BaseUrl,
-  headers: {
-    Authorization: getToken(),
-  },
-});
-
 export const getItemList = createAsyncThunk('list/getItemList', async () => {
   try {
     const resp = await axios.get(`${BaseUrl}/list`);
     return resp.data;
   } catch (error) {
     const { statusCode, message } = error.response.data;
-    console.error(statusCode, message);
     throw { message: `${statusCode} - ${message}` };
   }
 });
 
 export const createItemList = createAsyncThunk(
   'list/createItemList',
-  async (item) => {
+  async (payload) => {
+    const itemToAdd = { nome: payload.nome, poder: payload.poder };
+
     try {
-      const resp = await myAxios.post(`${BaseUrl}/post`, item);
+      const resp = await axios.post(`${BaseUrl}/post`, itemToAdd, {
+        headers: {
+          Authorization: payload.token,
+        },
+      });
       console.log(resp.status, resp.statusText, resp.data);
 
       const list = await axios.get(`${BaseUrl}/list`);
       return list.data;
     } catch (error) {
       const { statusCode, message } = error.response.data;
-      console.error(statusCode, message);
       throw { message: `${statusCode} - ${message}` };
     }
   }
@@ -49,16 +37,21 @@ export const createItemList = createAsyncThunk(
 
 export const editItemList = createAsyncThunk(
   'list/editItemList',
-  async (item) => {
+  async (payload) => {
     const updatedItem = {
-      nome: item.nome,
-      poder: item.poder,
+      nome: payload.updatedItem.nome,
+      poder: payload.updatedItem.poder,
     };
 
     try {
-      const resp = await myAxios.patch(
-        `${BaseUrl}/update/${item.id}`,
-        updatedItem
+      const resp = await axios.patch(
+        `${BaseUrl}/update/${payload.updatedItem.id}`,
+        updatedItem,
+        {
+          headers: {
+            Authorization: payload.token,
+          },
+        }
       );
       console.log(resp.status, resp.statusText, resp.data);
 
@@ -66,7 +59,6 @@ export const editItemList = createAsyncThunk(
       return list.data;
     } catch (error) {
       const { statusCode, message } = error.response.data;
-      console.error(statusCode, message);
       throw { message: `${statusCode} - ${message}` };
     }
   }
@@ -74,17 +66,19 @@ export const editItemList = createAsyncThunk(
 
 export const deleteItemList = createAsyncThunk(
   'list/deleteItemList',
-  async (item) => {
-    const id = item._id;
+  async (payload) => {
     try {
-      const resp = await myAxios.delete(`${BaseUrl}/delete/${id}`);
+      const resp = await axios.delete(`${BaseUrl}/delete/${payload.id}`, {
+        headers: {
+          Authorization: payload.token,
+        },
+      });
       console.log(resp.status, resp.statusText, resp.data);
 
       const list = await axios.get(`${BaseUrl}/list`);
       return list.data;
     } catch (error) {
       const { statusCode, message } = error.response.data;
-      console.error(statusCode, message);
       throw { message: `${statusCode} - ${message}` };
     }
   }
@@ -92,16 +86,19 @@ export const deleteItemList = createAsyncThunk(
 
 export const clearItemList = createAsyncThunk(
   'list/clearItemList',
-  async () => {
+  async (token) => {
     try {
-      const resp = await myAxios.delete(`${BaseUrl}/deleteAll`);
+      const resp = await axios.delete(`${BaseUrl}/deleteAll`, {
+        headers: {
+          Authorization: token,
+        },
+      });
       console.log(resp.status, resp.statusText, resp.data);
 
       const list = await axios.get(`${BaseUrl}/list`);
       return list.data;
     } catch (error) {
       const { statusCode, message } = error.response.data;
-      console.error(statusCode, message);
       throw { message: `${statusCode} - ${message}` };
     }
   }

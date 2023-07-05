@@ -35,7 +35,7 @@ const ItemsListPage = () => {
     isLoginInNotifyOpen,
     item,
   } = useSelector((store) => store.modal);
-  const { isLoggedIn } = useSelector((store) => store.user);
+  const { isLoggedIn, user } = useSelector((store) => store.user);
   const { itemsList, isLoading, errorMessage } = useSelector(
     (store) => store.db
   );
@@ -142,10 +142,10 @@ const ItemsListPage = () => {
       />
 
       <section className='item-list'>
-        {isDeleteOpen && <DeleteModal item={item} />}
-        {isEditOpen && <EditModal item={item} />}
-        {isAddOpen && <AddModal />}
-        {isDeleteAllOpen && <DeleteAllModal />}
+        {isDeleteOpen && <DeleteModal item={item} token={user.token} />}
+        {isEditOpen && <EditModal item={item} token={user.token} />}
+        {isAddOpen && <AddModal token={user.token} />}
+        {isDeleteAllOpen && <DeleteAllModal token={user.token} />}
         {isLoginInNotifyOpen && <LoginNotifyModal />}
 
         {isLoading ? <Loading /> : <RenderItems />}

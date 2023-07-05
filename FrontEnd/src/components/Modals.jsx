@@ -18,8 +18,9 @@ import {
   clearItemList,
 } from '../../reducers/dbSlice';
 
-export const DeleteModal = ({ item }) => {
+export const DeleteModal = ({ item, token }) => {
   const dispatch = useDispatch();
+  const id = item._id;
 
   return (
     <ModalComp>
@@ -30,7 +31,7 @@ export const DeleteModal = ({ item }) => {
           <Button
             className='btn-confirm'
             onClick={() => {
-              dispatch(deleteItemList(item));
+              dispatch(deleteItemList({ id, token }));
               dispatch(closeDeleteModal());
             }}
           >
@@ -51,7 +52,7 @@ export const DeleteModal = ({ item }) => {
   );
 };
 
-export const DeleteAllModal = () => {
+export const DeleteAllModal = ({ token }) => {
   const dispatch = useDispatch();
 
   return (
@@ -64,7 +65,7 @@ export const DeleteAllModal = () => {
         <Button
           className='btn-confirm'
           onClick={() => {
-            dispatch(clearItemList());
+            dispatch(clearItemList(token));
             dispatch(closeDeleteAllModal());
           }}
         >
@@ -84,7 +85,7 @@ export const DeleteAllModal = () => {
   );
 };
 
-export const EditModal = ({ item }) => {
+export const EditModal = ({ item, token }) => {
   const { _id, nome, poder } = item;
   const dispatch = useDispatch();
 
@@ -113,7 +114,7 @@ export const EditModal = ({ item }) => {
       poder: updatedDescription,
     };
 
-    dispatch(editItemList(updatedItem));
+    dispatch(editItemList({ updatedItem, token }));
     dispatch(closeEditModal());
   }
 
@@ -157,7 +158,7 @@ export const EditModal = ({ item }) => {
   );
 };
 
-export const AddModal = () => {
+export const AddModal = ({ token }) => {
   const dispatch = useDispatch();
 
   function handleSubmit(e) {
@@ -175,7 +176,7 @@ export const AddModal = () => {
       return;
     }
 
-    dispatch(createItemList({ nome, poder }));
+    dispatch(createItemList({ nome, poder, token }));
     dispatch(closeAddModal());
   }
 
