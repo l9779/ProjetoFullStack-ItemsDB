@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { colors, gradients } from '../../config/cssValues';
 import { LogoutIcon, UserIcon } from '../../assets/icons';
 import { logIn, logOut } from '../../reducers/userSlice';
 
 const Header = () => {
+  const [userMenu, setUserMenu] = useState(true);
+
   const dispatch = useDispatch();
 
   const { isLoggedIn, user } = useSelector((store) => store.user);
@@ -36,16 +38,32 @@ const Header = () => {
         </Link>
 
         {isLoggedIn ? (
-          <div className='user'>
-            <UserIcon />
-            <h2>{user.username}</h2>
+          <div>
             <button
               onClick={() => {
-                handleLogout();
+                setUserMenu(!userMenu);
               }}
             >
-              <LogoutIcon />
+              <UserIcon />
             </button>
+            {userMenu && (
+              <div
+                onFocus={() => console.log('focus!')}
+                className='user-actions'
+              >
+                <h3>{user.username}</h3>
+                <hr />
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setUserMenu(false);
+                  }}
+                >
+                  <h3>Logout</h3>
+                  <LogoutIcon />
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <Link to={'/login'}>
@@ -83,36 +101,53 @@ const NavBar = styled.nav`
     }
   }
 
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
   .links {
     display: flex;
     gap: 2.5rem;
 
     svg {
       width: 20px;
+      color: ${colors['light-green']};
     }
 
-    .user {
-      display: flex;
-      gap: 5px;
+    .user-actions {
+      background-color: ${colors['content-bg-color']};
+      border-radius: 4px;
 
-      svg {
-        color: ${colors['light-green']};
+      position: absolute;
+      right: 5%;
+
+      width: 125px;
+      padding: 4px 8px;
+
+      h3 {
+        color: ${colors.white};
+        font-size: 16px;
+      }
+
+      hr {
+        margin: 4px 0;
       }
 
       button {
-        background: none;
-        border: none;
-
-        margin-left: 15px;
-        width: 20px;
-
-        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
 
         svg {
-          color: white;
+          color: ${colors.white};
+        }
 
-          &:hover {
-            color: ${colors.red};
+        &:hover {
+          h3,
+          svg {
+            color: ${colors.yellow};
           }
         }
       }
