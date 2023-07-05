@@ -1,7 +1,7 @@
 import { useRouteError } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import { colors } from '../../config/cssValues';
+import { colors, measures } from '../../config/cssValues';
 
 const Error = () => {
   const error = useRouteError();
@@ -17,8 +17,22 @@ const Error = () => {
 };
 
 const ErrorComp = styled.div`
-  span {
-    color: ${colors.red};
+  background-color: ${colors['error-bg']};
+  border: 1px solid ${colors.red};
+  color: ${colors['error-text']};
+  border-radius: ${measures['br-1']};
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 15px 0;
+  margin: 0 5px 10px 5px;
+
+  h1,
+  pre,
+  h2 {
+    font-size: 1.6rem;
   }
 `;
 

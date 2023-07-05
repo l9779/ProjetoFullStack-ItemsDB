@@ -102,8 +102,6 @@ const ItemsListPage = () => {
   const ErrorMessage = () => {
     return (
       <ErrorSection>
-        {/* <pre>401</pre>
-        <span>&nbsp;-&nbsp;</span> */}
         <h2>{errorMessage}</h2>
       </ErrorSection>
     );
